@@ -46,7 +46,7 @@ mvn package -Dmaven.test.skip=true
 
 ### 例如创建一个 hello 应用
 
-java -jar create-lealone-app-5.2.0.jar -groupId org.lealone.examples.hello -artifactId hello
+java -jar create-lealone-app-5.2.0.jar -groupId com.lealone.examples.hello -artifactId hello
 
 
 ### 构建 hello 应用
