@@ -13,7 +13,7 @@ mvn package -Dmaven.test.skip=true
 
 ### 运行
 
-进入 `target` 目录，运行: java -jar create-lealone-app-6.0.0.jar [选项]
+进入 `target` 目录，运行: java -jar create-lealone-app-6.0.1.jar [选项]
 
 支持以下选项：
 
@@ -46,7 +46,7 @@ mvn package -Dmaven.test.skip=true
 
 ### 例如创建一个 hello 应用
 
-java -jar create-lealone-app-6.0.0.jar -groupId com.lealone.examples.hello -artifactId hello
+java -jar create-lealone-app-6.0.1.jar -groupId com.lealone.examples.hello -artifactId hello
 
 
 ### 构建 hello 应用
