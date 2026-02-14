@@ -26,36 +26,30 @@
     <baseDirectory>/</baseDirectory>
     <fileSets>
         <fileSet>
-            <directory>./${appName}-dist/bin</directory>
+            <directory>${appName}-main/dist/bin</directory>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>./${appName}-dist/conf</directory>
+            <directory>${appName}-main/dist/conf</directory>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
-		<fileSet>
-			<directory>./${appName}-dal/src/main/resources</directory>
-			<includes>
-				<include>*.sql</include>
-			</includes>
-			<outputDirectory>/sql</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>./${appName}-service/src/main/resources</directory>
-			<includes>
-				<include>*.sql</include>
-			</includes>
-			<outputDirectory>/sql</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>${appName}-dist/target/web</directory>
-			<outputDirectory>/web</outputDirectory>
-		</fileSet>
+        <fileSet>
+            <directory>${appName}-model/sql</directory>
+            <outputDirectory>/sql</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${appName}-service/sql</directory>
+            <outputDirectory>/sql</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${appName}-web/web</directory>
+            <outputDirectory>/web</outputDirectory>
+        </fileSet>
     </fileSets>
 
     <files>
         <file>
-            <source>${appName}-dist/target/${artifactId}-${r'${project.version}'}.jar</source>
+            <source>${appName}-main/target/${artifactId}-all-${r'${project.version}'}.jar</source>
             <outputDirectory>lib</outputDirectory>
         </file>
     </files>

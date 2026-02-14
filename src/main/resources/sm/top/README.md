@@ -14,21 +14,13 @@ build -p
 
 cd target\${artifactId}-${version}\bin
 
-lealone
-
-
-
-### 初始化数据
-
-cd target\${artifactId}-${version}\bin
-
-runSqlScript
+${artifactId}
 
 
 
 ### 打开页面
 
-http://localhost:9000/
+http://localhost:8080/
 
 
 
@@ -37,8 +29,6 @@ http://localhost:9000/
 
 把代码导入到 IDE 后，
 
-先运行 ${appClassName}Test 启动应用，
+运行 ${appClassName}Test 启动应用，
 
-然后运行 ${appClassName}SqlScriptTest 初始化数据，
-
-最后就能打开页面查看了。
+然后就能打开页面查看了。

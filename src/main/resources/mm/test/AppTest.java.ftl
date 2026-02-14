@@ -15,27 +15,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ${packageName}.test;
+package com.lealone.examples.${appName}.test;
 
-import ${packageName}.main.${appClassName};
+import java.io.File;
+import java.net.URL;
 
-import org.lealone.common.exceptions.ConfigException;
-import org.lealone.main.config.Config;
-import org.lealone.main.config.YamlConfigLoader;
-import org.lealone.plugins.service.http.HttpServerEngine;
+import com.lealone.examples.${appName}.main.${appClassName};
+import com.lealone.examples.${appName}.web.${appClassName}Router;
+import com.lealone.plugins.boot.LealoneApplication;
 
-public class ${appClassName}Test extends YamlConfigLoader {
+public class ${appClassName}Test {
 
     public static void main(String[] args) {
-        System.setProperty("lealone.config.loader", ${appClassName}Test.class.getName());
-        ${appClassName}.main(args);
+        String[] sqlScripts = {
+                // 执行建表脚本，同时自动生成对应的模型类的代码
+                getAbsolutePath("${appName}-model/sql/tables.sql"),
+                // 初始化数据
+                getAbsolutePath("${appName}-model/sql/init-data.sql"),
+                // 执行服务创建脚本，同时自动生成对应的服务接口代码
+                getAbsolutePath("${appName}-service/sql/services.sql") };
+
+        String modelSrcDir = getAbsolutePath("${appName}-model/src/main/java");
+        String serviceSrcDir = getAbsolutePath("${appName}-service/src/main/java");
+
+        LealoneApplication app = new LealoneApplication();
+        app.setBaseDir("./target/test-data");
+        // 动态生成绝对路径的webRoot，使用相对路径在eclipse和idea下面总有一个不正确
+        app.setWebRoot(getAbsolutePath("${appName}-web/web"));
+        app.setDatabase("${appName}");
+        app.setInitSql("set @modelSrcDir '" + modelSrcDir + "';set @serviceSrcDir '" + serviceSrcDir + "'");
+        app.setSqlScripts(sqlScripts);
+        app.setEnvironment("dev");
+        app.setRouter(${appClassName}Router.class);
+        app.start();
     }
 
-    @Override
-    public void applyConfig(Config config) throws ConfigException {
-        // 动态生成绝对路径的webRoot，使用相对路径在eclipse和idea下面总有一个不正确
-        String webRoot = ${appClassName}.getAbsolutePath("${appName}-web/web");
-        config.getProtocolServerParameters(HttpServerEngine.NAME).put("web_root", webRoot);
-        super.applyConfig(config);
+    public static String getAbsolutePath(String name) {
+        String appBaseDir;
+        try {
+            String classFile = ${appClassName}.class.getName().replace('.', '/') + ".class";
+            URL url = ${appClassName}.class.getClassLoader().getResource(classFile);
+            String file = new File(url.toURI()).getAbsolutePath();
+            int pos = file.indexOf("${appName}-main");
+            appBaseDir = file.substring(0, pos - 1);
+        } catch (Exception e) {
+            appBaseDir = ".";
+        }
+        return new File(appBaseDir, name).getAbsolutePath().replace('/', File.separatorChar);
     }
 }

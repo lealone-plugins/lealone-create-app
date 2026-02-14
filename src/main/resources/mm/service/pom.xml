@@ -32,7 +32,7 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>${artifactId}-dal</artifactId>
+            <artifactId>${artifactId}-model</artifactId>
             <version>${r'${project.version}'}</version>
         </dependency>
     </dependencies>

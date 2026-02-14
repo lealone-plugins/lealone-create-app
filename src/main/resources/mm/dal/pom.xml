@@ -24,11 +24,7 @@
         <version>${version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <artifactId>${artifactId}-dal</artifactId>
+    <artifactId>${artifactId}-model</artifactId>
     <packaging>jar</packaging>
     <version>${version}</version>
-
-    <dependencies>
-    </dependencies>
 </project>

@@ -277,11 +277,8 @@ public class CreateLealoneApp {
         writeTopFiles();
         if (createDal)
             writeDalFiles();
-        writeDistFiles();
         writeMainFiles();
         writeServiceFiles();
-        if (createTest)
-            writeTestFiles();
         if (createWeb)
             writeWebFiles();
     }
@@ -293,10 +290,6 @@ public class CreateLealoneApp {
 
     private void createSrcMainJava(File parentDir) throws Exception {
         new File(parentDir, srcMainJava).mkdirs();
-    }
-
-    private void createSrcMainResources(File parentDir) throws Exception {
-        new File(parentDir, srcMainResources).mkdirs();
     }
 
     private void createSrcTestJava(File parentDir) throws Exception {
@@ -318,10 +311,10 @@ public class CreateLealoneApp {
     }
 
     private void writeTopFiles() throws Exception {
-        writeFile("/mm/top/build.bat", parentDir);
-        writeFile("/mm/top/build.sh", parentDir);
+        writeFile("/sm/top/build.bat", parentDir);
+        writeFile("/sm/top/build.sh", parentDir);
+        writeFile("/sm/top/README.md", parentDir);
         writeFile("/mm/top/pom.xml", parentDir);
-        writeFile("/mm/top/README.md", parentDir);
     }
 
     private void writeSingleModuleTopFiles() throws Exception {
@@ -332,13 +325,13 @@ public class CreateLealoneApp {
     }
 
     private void writeDalFiles() throws Exception {
-        File moduleDir = createModuleDir("dal");
+        File moduleDir = createModuleDir("model");
         createSrcMainJava(moduleDir);
-        createSrcMainResources(moduleDir);
-        new File(moduleDir, srcMainJava + "/" + packageName.replace('.', '/') + "/dal").mkdirs();
-        File toDir = new File(moduleDir, srcMainResources);
-        writeFile("/mm/dal/init-data.sql", toDir);
-        writeFile("/mm/dal/tables.sql", toDir);
+        new File(moduleDir, srcMainJava + "/" + packageName.replace('.', '/') + "/model").mkdirs();
+        File toDir = new File(moduleDir, "sql");
+        toDir.mkdir();
+        writeFile("/sm/sql/init-data.sql", toDir);
+        writeFile("/sm/sql/tables.sql", toDir);
         writeFile("/mm/dal/pom.xml", moduleDir);
     }
 
@@ -350,42 +343,17 @@ public class CreateLealoneApp {
         writeFile("/sm/sql/tables.sql", toDir);
     }
 
-    private void writeDistFiles() throws Exception {
-        File moduleDir = createModuleDir("dist");
-
-        File binDir = new File(moduleDir, "bin");
-        binDir.mkdir();
-        writeFile("/mm/dist/bin/lealone.bat", binDir);
-        writeFile("/mm/dist/bin/lealone.sh", binDir);
-        writeFile("/mm/dist/bin/runSqlScript.bat", binDir);
-        writeFile("/mm/dist/bin/runSqlScript.sh", binDir);
-        writeFile("/mm/dist/bin/sqlshell.bat", binDir);
-        writeFile("/mm/dist/bin/sqlshell.sh", binDir);
-
-        File confDir = new File(moduleDir, "conf");
-        confDir.mkdir();
-        writeFile("/mm/dist/conf/lealone.yaml", confDir);
-        writeFile("/mm/dist/conf/log4j2.xml", confDir);
-
-        writeFile("/mm/dist/assembly.xml", moduleDir);
-        writeFile("/mm/dist/pom.xml", moduleDir);
-    }
-
     private void writeSingleModuleDistFiles() throws Exception {
         File moduleDir = new File(parentDir, "dist");
         moduleDir.mkdir();
         File binDir = new File(moduleDir, "bin");
         binDir.mkdir();
-        writeFile("/sm/dist/bin/lealone.bat", binDir);
-        writeFile("/sm/dist/bin/lealone.sh", binDir);
-        writeFile("/sm/dist/bin/runSqlScript.bat", binDir);
-        writeFile("/sm/dist/bin/runSqlScript.sh", binDir);
-        writeFile("/sm/dist/bin/sqlshell.bat", binDir);
-        writeFile("/sm/dist/bin/sqlshell.sh", binDir);
+        writeFile("/sm/dist/bin/lealone.bat", binDir, artifactId + ".bat");
+        writeFile("/sm/dist/bin/lealone.sh", binDir, artifactId + ".sh");
 
         File confDir = new File(moduleDir, "conf");
         confDir.mkdir();
-        writeFile("/sm/dist/conf/lealone.yaml", confDir);
+        writeFile("/sm/dist/conf/lealone.sql", confDir);
         writeFile("/sm/dist/conf/log4j2.xml", confDir);
 
         writeFile("/sm/dist/assembly.xml", moduleDir);
@@ -393,13 +361,36 @@ public class CreateLealoneApp {
 
     private void writeMainFiles() throws Exception {
         File moduleDir = createModuleDir("main");
+        createSrcTestJava(moduleDir);
+        createSrcTestResources(moduleDir);
         createSrcMainJava(moduleDir);
         File toDir = new File(moduleDir, srcMainJava);
         toDir = new File(toDir, packageName.replace('.', '/') + "/main");
         toDir.mkdirs();
-        writeFile("/mm/main/App.java.ftl", toDir, appClassName + ".java");
-        writeFile("/mm/main/SqlScript.java.ftl", toDir, appClassName + "SqlScript.java");
+        writeFile("/sm/main/App.java.ftl", toDir, appClassName + ".java");
         writeFile("/mm/main/pom.xml", moduleDir);
+
+        toDir = new File(moduleDir, srcTestJava);
+        toDir = new File(toDir, packageName.replace('.', '/') + "/test");
+        toDir.mkdirs();
+        writeFile("/mm/test/AppTest.java.ftl", toDir, appClassName + "Test.java");
+
+        toDir = new File(moduleDir, srcTestResources);
+        writeFile("/sm/test/log4j2-test.xml", toDir);
+
+        File distDir = new File(moduleDir, "dist");
+        distDir.mkdir();
+        File binDir = new File(distDir, "bin");
+        binDir.mkdir();
+        writeFile("/sm/dist/bin/lealone.bat", binDir, artifactId + ".bat");
+        writeFile("/sm/dist/bin/lealone.sh", binDir, artifactId + ".sh");
+
+        File confDir = new File(distDir, "conf");
+        confDir.mkdir();
+        writeFile("/sm/dist/conf/lealone.sql", confDir);
+        writeFile("/sm/dist/conf/log4j2.xml", confDir);
+
+        writeFile("/mm/dist/assembly.xml", distDir);
     }
 
     private void writeSingleModuleMainFiles() throws Exception {
@@ -407,16 +398,15 @@ public class CreateLealoneApp {
         toDir = new File(toDir, packageName.replace('.', '/') + "/main");
         toDir.mkdirs();
         writeFile("/sm/main/App.java.ftl", toDir, appClassName + ".java");
-        writeFile("/sm/main/SqlScript.java.ftl", toDir, appClassName + "SqlScript.java");
     }
 
     private void writeServiceFiles() throws Exception {
         File moduleDir = createModuleDir("service");
         createSrcMainJava(moduleDir);
-        createSrcMainResources(moduleDir);
         new File(moduleDir, srcMainJava + "/" + packageName.replace('.', '/') + "/service").mkdirs();
-        File toDir = new File(moduleDir, srcMainResources);
-        writeFile("/mm/service/services.sql", toDir);
+        File toDir = new File(moduleDir, "sql");
+        toDir.mkdir();
+        writeFile("/sm/sql/services.sql", toDir);
         writeFile("/mm/service/pom.xml", moduleDir);
     }
 
@@ -426,37 +416,16 @@ public class CreateLealoneApp {
         writeFile("/sm/sql/services.sql", toDir);
     }
 
-    private void writeTestFiles() throws Exception {
-        File moduleDir = createModuleDir("test");
-        createSrcTestJava(moduleDir);
-        createSrcTestResources(moduleDir);
-        new File(moduleDir, srcTestJava + "/" + packageName.replace('.', '/') + "/test").mkdirs();
-        File toDir = new File(moduleDir, srcTestResources);
-        writeFile("/mm/test/lealone.yaml", toDir);
-        writeFile("/mm/test/log4j2-test.xml", toDir);
-        writeFile("/mm/test/pom.xml", moduleDir);
-
-        toDir = new File(moduleDir, srcTestJava);
-        toDir = new File(toDir, packageName.replace('.', '/') + "/test");
-        toDir.mkdirs();
-        writeFile("/mm/test/AppTest.java.ftl", toDir, appClassName + "Test.java");
-        writeFile("/mm/test/SqlScriptTest.java.ftl", toDir, appClassName + "SqlScriptTest.java");
-        writeFile("/mm/test/TemplateCompilerTest.java.ftl", toDir,
-                appClassName + "TemplateCompilerTest.java");
-    }
-
     private void writeSingleModuleTestFiles() throws Exception {
         new File(parentDir, srcTestJava + "/" + packageName.replace('.', '/') + "/test").mkdirs();
         File toDir = new File(parentDir, srcTestResources);
         toDir.mkdirs();
-        writeFile("/sm/test/lealone.yaml", toDir);
         writeFile("/sm/test/log4j2-test.xml", toDir);
 
         toDir = new File(parentDir, srcTestJava);
         toDir = new File(toDir, packageName.replace('.', '/') + "/test");
         toDir.mkdirs();
         writeFile("/sm/test/AppTest.java.ftl", toDir, appClassName + "Test.java");
-        writeFile("/sm/test/SqlScriptTest.java.ftl", toDir, appClassName + "SqlScriptTest.java");
         // writeFile("/sm/test/TemplateCompilerTest.java.ftl", toDir,
         // appClassName + "TemplateCompilerTest.java");
     }
@@ -470,13 +439,17 @@ public class CreateLealoneApp {
 
         File webDir = new File(toDir, "web");
         webDir.mkdir();
-        writeFile("/mm/web/Router.java.ftl", webDir, appClassName + "Router.java");
+        writeFile("/sm/web/Router.java.ftl", webDir, appClassName + "Router.java");
 
         writeFile("/mm/web/pom.xml", moduleDir);
 
         webDir = new File(moduleDir, "web");
         webDir.mkdir();
-        writeFile("/mm/web/index.html", webDir);
+
+        writeFile("/sm/web/index.html", webDir);
+        copyFile("/sm/web/axios.min-0.21.1.js", webDir);
+        copyFile("/sm/web/vue.min-2.3.3.js", webDir);
+        copyFile("/sm/web/lealone-rpc-5.0.0.js", webDir);
     }
 
     private void writeSingleModuleWebFiles() throws Exception {

@@ -17,12 +17,20 @@
  */
 package ${packageName}.test;
 
-import ${packageName}.main.${appClassName};
+import ${packageName}.web.${appClassName}Router;
+import com.lealone.plugins.boot.LealoneApplication;
 
 public class ${appClassName}Test {
 
     public static void main(String[] args) {
-        ${appClassName}.main(args);
+        LealoneApplication app = new LealoneApplication();
+        app.setBaseDir("./target/test-data");
+        app.setWebRoot("./web");
+        app.setDatabase("${artifactId}");
+        app.setInitSql("set @modelSrcDir './src/main/java';set @serviceSrcDir './src/main/java'");
+        app.setSqlScripts("./sql/tables.sql", "./sql/init-data.sql", "./sql/services.sql");
+        app.setEnvironment("dev");
+        app.setRouter(${appClassName}Router.class);
+        app.start();
     }
-
 }

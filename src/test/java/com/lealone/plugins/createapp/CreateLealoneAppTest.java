@@ -26,7 +26,7 @@ public class CreateLealoneAppTest {
                 + "-groupId com.lealone.examples.hello " //
                 + "-artifactId hello " //
                 + "-version 1.0.1 " //
-        // + "-singleModule false " //
+                + "-singleModule false " //
         ;
         CreateLealoneApp.main(str.split(" "));
     }

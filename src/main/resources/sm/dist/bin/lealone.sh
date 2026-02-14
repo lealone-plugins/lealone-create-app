@@ -46,4 +46,4 @@ fi
 
 CLASSPATH=$LEALONE_HOME/conf:$LEALONE_HOME/lib/*
 
-"$JAVA_HOME/bin/java" $JAVA_OPTS -cp $CLASSPATH ${packageName}.main.${appClassName} $@
+"$JAVA_HOME/bin/java" $JAVA_OPTS -cp $CLASSPATH ${packageName}.main.${appClassName} -database ${artifactId} -initSql "set @disable_generate_code true" -sqlScripts "../sql/tables.sql,../sql/init-data.sql,../sql/services.sql" $@

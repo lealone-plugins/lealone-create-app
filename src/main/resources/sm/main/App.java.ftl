@@ -17,14 +17,14 @@
  */
 package ${packageName}.main;
 
-import org.lealone.main.Lealone;
+import com.lealone.plugins.boot.LealoneApplication;
 
 public class ${appClassName} {
 
     public static void main(String[] args) {
         // 请在浏览器中打开下面这个URL进行测试:
-        // http://localhost:9000/
-        Lealone.main(args);
+        // http://localhost:8080/
+        LealoneApplication.start(args);
     }
 
 }

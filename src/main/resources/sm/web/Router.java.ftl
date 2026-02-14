@@ -19,14 +19,13 @@ package ${packageName}.web;
 
 import java.util.Map;
 
-import org.lealone.plugins.service.http.HttpServer;
-import org.lealone.plugins.vertx.VertxRouter;
+import com.lealone.plugins.tomcat.TomcatRouter;
 
-public class ${appClassName}Router extends VertxRouter {
+public class ${appClassName}Router extends TomcatRouter {
 
     @Override
-    public void init(HttpServer server, Map<String, String> config) {
-        super.init(server, config);
+    public void init(Map<String, String> config) {
+        super.init(config);
     }
 
 }
