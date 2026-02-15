@@ -60,10 +60,10 @@ build -p
 
 cd target\hello-1.0.0\bin
 
-lealone
+hello
 
 
 ### 打开页面
 
-http://localhost:9000/
+http://localhost:8080/
 
